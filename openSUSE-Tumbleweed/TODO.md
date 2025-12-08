@@ -1,7 +1,6 @@
 # Todo
 
 ## New
-- Docker
 - Kubernetes
 
 ## Fix
