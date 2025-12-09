@@ -16,4 +16,6 @@ cat /etc/group | grep docker
 sudo usermod -aG docker <ユーザー名>
 newgrp docker
 
+# compose インストール
+sudo zypper install docker-compose
 ```
