@@ -11,3 +11,9 @@
 # install drawio
 sudo pacman -S drawio-desktop
 ```
+
+## VSCodium
+
+```bash
+yay -S vscodium-bin
+```
