@@ -12,4 +12,7 @@ fc-cache -fv
 # 確認
 fc-list | grep -i emoji
 
+# JetBranins
+sudo pacman -S ttf-jetbrains-mono
+
 ```
