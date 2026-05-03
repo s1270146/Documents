@@ -2,17 +2,23 @@
 
 ## Nerd Font
 
-Nerd Fontのzipファイルをインストール
-zipファイルを$HOME/.local/share/fonts/で解凍
+### インストール
 
-反映させる
+- Nerd Font の zip ファイルを取得する
+- `$HOME/.local/share/fonts/` で展開する
+
+### 反映
+
 ```bash
 fc-cache -fv
 ```
 
-確認
+### 確認
+
 ```bash
-fc-match “<フォント名>”
+fc-match "<フォント名>"
 ```
 
-<https://qiita.com/aosho235/items/6dc59b0f3dba373f3564>
+## 参考
+
+- <https://qiita.com/aosho235/items/6dc59b0f3dba373f3564>

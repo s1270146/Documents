@@ -1,21 +1,29 @@
-# コンテナ系
+# コンテナ
 
 ## Docker
 
-```bash
-# install
-sudo zypper install docker
+### インストール
 
-# systemdで Dockerデーモンを管理
+```bash
+sudo zypper install docker docker-compose
+```
+
+### 起動設定
+
+```bash
 sudo systemctl enable docker
 sudo systemctl start docker
+```
 
-# gid確認
-cat /etc/group | grep docker 
-# group追加
+### ユーザーを `docker` グループへ追加
+
+```bash
+grep docker /etc/group
 sudo usermod -aG docker <ユーザー名>
 newgrp docker
-
-# compose インストール
-sudo zypper install docker-compose
 ```
+
+## メモ
+
+- `docker-compose` も `zypper` で入れる
+- グループ追加後は再ログインか `newgrp docker` が必要

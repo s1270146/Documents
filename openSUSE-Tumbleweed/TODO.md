@@ -1,8 +1,10 @@
-# Todo
+# TODO
 
 ## New
+
 - Kubernetes
 
 ## Fix
+
 - Neovim
-  - Markdown linter
+- Markdown linter
