@@ -339,3 +339,98 @@ pulseaudio -k
 ```bash
 ~/.config/polybar/launch.sh
 ```
+
+## システム全体 EQ
+
+### 概要
+
+- システム全体の EQ には `pulseaudio-equalizer` を使う
+- EQ の調整は `qpaeq`
+- 出力先の切替は `pavucontrol` か `pactl`
+- 今の構成では `easyeffects` は使わない
+- 理由は `pulseaudio` 運用中で、`easyeffects` は `pipewire-pulse` と衝突するため
+
+### インストールしたもの
+
+```bash
+sudo pacman -S --needed pulseaudio-equalizer pavucontrol
+```
+
+### 使い方
+
+- `qpaeq` は EQ カーブを編集する
+- `pavucontrol` は各アプリの出力先を `...equalizer` に向けるために使う
+- `Hz` が低いほど低音、高いほど高音
+
+### X11 認証で `qpaeq` が開かない時
+
+症状
+
+```bash
+Authorization required, but no authorization protocol specified
+qt.qpa.xcb: could not connect to display :0
+```
+
+原因
+
+- `XAUTHORITY` が消えた一時ファイルを指していた
+
+確認
+
+```bash
+echo "$DISPLAY"
+echo "$XAUTHORITY"
+ls -l "$XAUTHORITY"
+```
+
+対応
+
+```bash
+find /tmp -maxdepth 1 -type f -name 'xauth_*'
+export XAUTHORITY=/tmp/xauth_XXXXXX
+qpaeq
+```
+
+### 現在の構成
+
+- 既定出力は `bluez_sink.FC_58_FA_72_30_10.a2dp_sink.equalizer`
+- 実体の Bluetooth sink に `module-equalizer-sink` を噛ませて使う
+- `sink-input` の番号は毎回変わるので固定ではない
+
+確認コマンド
+
+```bash
+pactl list short sinks
+pactl info | grep 'Default Sink'
+pactl list short sink-inputs
+```
+
+### EQ sink を既定にする
+
+```bash
+pactl set-default-sink bluez_sink.FC_58_FA_72_30_10.a2dp_sink.equalizer
+```
+
+再生中アプリを EQ 側へ移す
+
+```bash
+pactl move-sink-input <ID> bluez_sink.FC_58_FA_72_30_10.a2dp_sink.equalizer
+```
+
+### Bluetooth スピーカー切替時のメモ
+
+- 新しい Bluetooth スピーカーを既定出力にすると、EQ が元の機器側に残ることがある
+- その場合は `equalizer sink` を新しい物理 sink に作り直す必要がある
+- 今回は `Echo Pop-3RD` に対して、元の `SPK100A18` と同じ sink 名で EQ を作り直して既存設定を流用した
+
+実施時の考え方
+
+- `qpaeq` の設定は sink 名に紐づく
+- そのため、既存設定を使いたい場合は同じ sink 名で作ると引き継ぎやすい
+
+### GUI 操作
+
+1. `qpaeq` を開く
+2. `pavucontrol` を開く
+3. `出力デバイス` で `...equalizer` を既定にする
+4. `再生` タブでアプリごとの出力先も `...equalizer` に切り替える
